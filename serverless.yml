@@ -24,14 +24,61 @@ provider:
   name: aws
   runtime: nodejs18.x
   profile: serverlessUser
+  environment:
+    tableName: ${self:custom.tableName}
+
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:*
+      Resource: '*'
+
+custom:
+  tableName: usercv
 
 
 
 functions:
-  newFunction:
-    handler: lambdas/getUser.handler
+  createResume:
+    handler: lambdas/createResume.handler
     events:
       - http:
-          path: get-user/{ID}
+          path: createResume
+          method: POST 
+          cors: true
+  getUserCV:
+    handler: lambdas/getUserCV.handler
+    events:
+      - http:
+          path: get-user-cv/{ID}
           method: GET
           cors: true
+  saveUserCV:
+    handler: lambdas/saveUserCV.handler
+    events:
+      - http:
+          path: save-user-cv/{ID}
+          method: POST
+          cors: true
+
+
+
+
+resources:
+  Resources:
+    DynamoDbTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:custom.tableName}
+        AttributeDefinitions:
+          - AttributeName: ID
+            AttributeType: S
+        KeySchema:
+          - AttributeName: ID
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
+
+
+
+
+  

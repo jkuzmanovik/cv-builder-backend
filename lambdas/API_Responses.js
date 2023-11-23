@@ -10,6 +10,17 @@ const Responses = {
             body: data,
         };
     },
+    _200json(data={}) {
+        return {
+            headers: {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Methods': '*',
+                'Access-Control-Allow-Origin': '*',
+            },
+            statusCode: 200,
+            body: JSON.stringify(data),
+        };
+    },
 
     _400(data = {}) {
         return {
