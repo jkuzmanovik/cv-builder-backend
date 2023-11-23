@@ -12,18 +12,18 @@ exports.handler = async event => {
     }
 
     let ID = event.pathParameters.ID;
-    const user = JSON.parse(event.body);
-    user.ID = ID;
-    console.log('user', user)
+    const data = JSON.parse(event.body);
+    data.ID = ID;
+    console.log('user', data)
 
-    const newUser = await Dynamo.write(user, tableName).catch(err => {
+    const newCV = await Dynamo.write(data, tableName).catch(err => {
         console.log('error in dynamo write', err);
         return null;
     });
 
-    if (!newUser) {
+    if (!newCV) {
         return Responses._400({ message: 'Failed to write user by ID' });
     }
 
-    return Responses._200json({ newUser });
+    return Responses._200json({ newCV });
 };

@@ -13,14 +13,14 @@ exports.handler = async event => {
 
     let ID = event.pathParameters.ID;
 
-    const user = await Dynamo.get(ID, tableName).catch(err => {
+    const newCV = await Dynamo.get(ID, tableName).catch(err => {
         console.log('error in Dynamo Get', err);
         return null;
     });
 
-    if (!user) {
+    if (!newCV) {
         return Responses._400({ message: 'Failed to get user by ID' });
     }
 
-    return Responses._200json({ user });
+    return Responses._200json({ newCV });
 };
