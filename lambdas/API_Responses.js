@@ -7,7 +7,7 @@ const Responses = {
                 'Access-Control-Allow-Origin': '*',
             },
             statusCode: 200,
-            body: JSON.stringify(data),
+            body: data,
         };
     },
 

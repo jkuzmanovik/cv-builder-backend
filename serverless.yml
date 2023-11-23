@@ -25,6 +25,8 @@ provider:
   runtime: nodejs18.x
   profile: serverlessUser
 
+
+
 functions:
   newFunction:
     handler: lambdas/getUser.handler
