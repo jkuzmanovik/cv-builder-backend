@@ -15,8 +15,16 @@ exports.handler = async event => {
     const data = JSON.parse(event.body);
     data.ID = ID;
     console.log('user', data)
+    let newCV = null;
 
-    const newCV = await Dynamo.write(data, tableName).catch(err => {
+    const returnedCV = await Dynamo.get(ID, tableName).catch(err => {
+        console.log('error in Dynamo Get', err);
+        return null;
+    });
+
+  
+
+     newCV = await Dynamo.write(data, tableName).catch(err => {
         console.log('error in dynamo write', err);
         return null;
     });
