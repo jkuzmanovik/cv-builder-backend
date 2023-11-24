@@ -8,7 +8,7 @@ exports.handler = async event => {
 
     if (!event.pathParameters || !event.pathParameters.userId) {
         // failed without an ID
-        return Responses._400({ message: 'missing the userId from the path' });
+        return Responses._400({ message: 'missing the userId from the path ' });
     }
 
     let userId = event.pathParameters.userId;
@@ -23,10 +23,10 @@ exports.handler = async event => {
         newCV = {}
     }
     if(newCV.CVS){
-        newCV.CVS = [...newCV.CVS, data]
+        newCV.CVS[data.id] = data
     }else{
         newCV.CVS = {
-            ...data
+            [data.id]:data
         }
     }
     newCV.userId = userId
