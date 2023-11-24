@@ -60,6 +60,13 @@ functions:
           path: save-user-cv/{userId}
           method: POST
           cors: true
+  deleteResume:
+    handler: lambdas/deleteUserCV.handler
+    events:
+      - http:
+          path: delete-user-cv/{userId}/{id}
+          method: DELETE
+          cors: true
 
 
 

@@ -19,7 +19,7 @@ exports.handler = async event => {
     });
 
     if (!newCV) {
-        return Responses._400({ message: 'Failed to get user by userId' });
+        return Responses._400({ message: 'Failed to get user by userId ' });
     }
 
     return Responses._200json({ newCV });
