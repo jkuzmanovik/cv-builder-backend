@@ -50,14 +50,14 @@ functions:
     handler: lambdas/getUserCV.handler
     events:
       - http:
-          path: get-user-cv/{ID}
+          path: get-user-cv/{userId}
           method: GET
           cors: true
   saveUserCV:
     handler: lambdas/saveUserCV.handler
     events:
       - http:
-          path: save-user-cv/{ID}
+          path: save-user-cv/{userId}
           method: POST
           cors: true
 
@@ -71,10 +71,10 @@ resources:
       Properties:
         TableName: ${self:custom.tableName}
         AttributeDefinitions:
-          - AttributeName: ID
+          - AttributeName: userId
             AttributeType: S
         KeySchema:
-          - AttributeName: ID
+          - AttributeName: userId
             KeyType: HASH
         BillingMode: PAY_PER_REQUEST
 

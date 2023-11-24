@@ -6,16 +6,16 @@ const tableName = process.env.tableName;
 exports.handler = async event => {
     console.log('event', event);
 
-    if (!event.pathParameters || !event.pathParameters.ID) {
+    if (!event.pathParameters || !event.pathParameters.userId) {
         // failed without an ID
-        return Responses._400({ message: 'missing the ID from the path' });
+        return Responses._400({ message: 'missing the userId from the path' });
     }
 
-    let ID = event.pathParameters.ID;
+    let userId = event.pathParameters.userId;
     const data = JSON.parse(event.body);
     console.log('user', data)
 
-    const newCV = await Dynamo.get(ID, tableName).catch(err => {
+    const newCV = await Dynamo.get(userId, tableName).catch(err => {
         console.log('error in Dynamo Get', err);
         return null;
     });
@@ -25,11 +25,11 @@ exports.handler = async event => {
     if(newCV.CVS){
         newCV.CVS = [...newCV.CVS, data]
     }else{
-        newCV.CVS = [data]
+        newCV.CVS = {
+            ...data
+        }
     }
-    newCV.ID = ID
-
- 
+    newCV.userId = userId
 
      let returned = await Dynamo.write(newCV, tableName).catch(err => {
         console.log('error in dynamo write', err);
@@ -37,7 +37,7 @@ exports.handler = async event => {
     });
 
     if (!returned) {
-        return Responses._400({ message: 'Failed to write user by ID' });
+        return Responses._400({ message: 'Failed to write CV by userId' });
     }
 
     return Responses._200json({ returned });

@@ -3,11 +3,11 @@ const AWS = require('aws-sdk');
 const documentClient = new AWS.DynamoDB.DocumentClient();
 
 const Dynamo = {
-    async get(ID, TableName) {
+    async get(userId, TableName) {
         const params = {
             TableName,
             Key: {
-                ID,
+                userId,
             },
         };
 
@@ -22,8 +22,8 @@ const Dynamo = {
     },
 
     async write(data, TableName) {
-        if (!data.ID) {
-            throw Error('no ID on the data');
+        if (!data.userId) {
+            throw Error('no userId on the data');
         }
 
         const params = {
@@ -34,7 +34,7 @@ const Dynamo = {
         const res = await documentClient.put(params).promise();
 
         if (!res) {
-            throw Error(`There was an error inserting ID of ${data.ID} in table ${TableName}`);
+            throw Error(`There was an error inserting userId of ${data.userId} in table ${TableName}`);
         }
 
         return data;
