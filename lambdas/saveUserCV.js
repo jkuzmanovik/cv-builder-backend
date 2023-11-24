@@ -13,25 +13,32 @@ exports.handler = async event => {
 
     let ID = event.pathParameters.ID;
     const data = JSON.parse(event.body);
-    data.ID = ID;
     console.log('user', data)
-    let newCV = null;
 
-    const returnedCV = await Dynamo.get(ID, tableName).catch(err => {
+    const newCV = await Dynamo.get(ID, tableName).catch(err => {
         console.log('error in Dynamo Get', err);
         return null;
     });
+    if(!newCV){
+        newCV = {}
+    }
+    if(newCV.CVS){
+        newCV.CVS = [...newCV.CVS, data]
+    }else{
+        newCV.CVS = [data]
+    }
+    newCV.ID = ID
 
-  
+ 
 
-     newCV = await Dynamo.write(data, tableName).catch(err => {
+     let returned = await Dynamo.write(newCV, tableName).catch(err => {
         console.log('error in dynamo write', err);
         return null;
     });
 
-    if (!newCV) {
+    if (!returned) {
         return Responses._400({ message: 'Failed to write user by ID' });
     }
 
-    return Responses._200json({ newCV });
+    return Responses._200json({ returned });
 };
